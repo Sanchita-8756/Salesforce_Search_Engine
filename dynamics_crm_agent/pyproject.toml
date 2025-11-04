@@ -1,0 +1,11 @@
+[project]
+name = "dynamics-crm-agent-min"
+version = "0.1.0"
+description = "Minimal Dynamics CRM agent using A2A + ADK"
+requires-python = ">=3.10"
+dependencies = [
+    "a2a-sdk>=0.2.5",
+    "google-adk>=1.2.1",
+    "python-dotenv",
+    "uvicorn",
+]

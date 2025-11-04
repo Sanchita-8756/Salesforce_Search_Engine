@@ -1,0 +1,11 @@
+settings:
+  salesforce:
+    username: tanvi.beri@grazitti.com
+    password: G@123456789
+    security_token: PfhyVSi2E6BqHTXOshuCYi7F2
+    domain: login
+    instance_url: https://grazittiinteractive-2a5-dev-ed.develop.lightning.force.com
+
+  mcp:
+    salesforce_server_port: 8002
+

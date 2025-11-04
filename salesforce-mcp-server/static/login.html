@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salesforce MCP - Login</title>
+    <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .login-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+        .login-btn {
+            background: #00d4aa;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        .login-btn:hover {
+            background: #00b894;
+        }
+        .error-toast {
+            background: #e74c3c;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        .loading {
+            display: none;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">Salesforce MCP</div>
+        <p>Secure access to your Salesforce operations</p>
+        
+        <div id="error-toast" class="error-toast"></div>
+        
+        <button id="login-btn" class="login-btn">Login with SSO</button>
+        
+        <div id="loading" class="loading">
+            <p>Authenticating...</p>
+        </div>
+    </div>
+
+    <script>
+        let auth0Client;
+
+        // Initialize Auth0
+        async function initAuth0() {
+            auth0Client = await auth0.createAuth0Client({
+                domain: 'dev-66olcyo8nk36j3m3.us.auth0.com',
+                clientId: 'neD0DEPvdPNM3GGgWJ0mJlJe06BZ9LQo',
+                authorizationParams: {
+                    redirect_uri: 'http://localhost:3000/' //window.location.origin + '/callback'
+                }
+            });
+
+            // Check if returning from Auth0
+            if (window.location.search.includes('code=')) {
+                await handleCallback();
+            }
+        }
+
+        // Handle login
+        async function login() {
+            try {
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('login-btn').style.display = 'none';
+                
+                await auth0Client.loginWithRedirect();
+            } catch (error) {
+                showError('Login failed. Please try again.');
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('login-btn').style.display = 'block';
+            }
+        }
+
+        // Handle callback from Auth0
+        async function handleCallback() {
+            try {
+                await auth0Client.handleRedirectCallback();
+                const token = await auth0Client.getTokenSilently();
+                
+                // Save token to localStorage
+                localStorage.setItem('auth_token', token);
+                
+                // Redirect to main app
+                window.location.href = '/dashboard';
+            } catch (error) {
+                showError('Authentication failed. Please try again.');
+                // Clean up URL
+                window.history.replaceState({}, document.title, '/login');
+            }
+        }
+
+        // Show error message
+        function showError(message) {
+            const errorToast = document.getElementById('error-toast');
+            errorToast.textContent = message;
+            errorToast.style.display = 'block';
+            setTimeout(() => {
+                errorToast.style.display = 'none';
+            }, 5000);
+        }
+
+        // Event listeners
+        document.getElementById('login-btn').addEventListener('click', login);
+
+        // Initialize on page load
+        initAuth0();
+    </script>
+</body>
+</html>

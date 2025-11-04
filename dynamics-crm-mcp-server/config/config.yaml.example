@@ -1,0 +1,17 @@
+settings:
+  dynamics_crm:
+    server_url: ${CRM_SERVER_URL}
+    username: ${CRM_USERNAME}
+    password: ${CRM_PASSWORD}
+    domain: ${CRM_DOMAIN}
+    client_id: ${CRM_CLIENT_ID}
+    client_secret: ${CRM_CLIENT_SECRET}
+    tenant_id: ${CRM_TENANT_ID}
+
+server:
+  host: ${HOST}
+  port: ${PORT}
+  debug: ${DEBUG}
+
+mcp:
+  name: ${MCP_NAME}

@@ -1,0 +1,6 @@
+fastmcp
+starlette
+uvicorn
+pyyaml
+pyjwt
+simple-salesforce

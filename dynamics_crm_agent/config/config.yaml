@@ -1,0 +1,12 @@
+settings:
+  dynamics_crm:
+    server_url: https://org9822e0bc.crm8.dynamics.com
+    username: lakhbirs@grazitti934.onmicrosoft.com
+    password: NavneetGRZ@2214
+    domain: your-domain
+    client_id: 5fd0b014-4e02-4962-9941-4d2602708d77
+    client_secret: QyT8Q~SL7Y5maIyGXVIgki30~y0ZOoMkhLoKRa.a
+    tenant_id: 5db30893-fb80-480e-be22-911156d0e5e0
+
+  mcp:
+    dynamics_crm_server_port: 8003
