@@ -10,8 +10,8 @@ from a2a.types import (
 	AgentCard,
 	AgentSkill,
 )
-from agent import create_agent
-from agent_executor import SalesforceAgentExecutor
+from .agent import create_agent
+from .agent_executor import SalesforceAgentExecutor
 from dotenv import load_dotenv
 from google.adk.artifacts import InMemoryArtifactService
 from google.adk.memory.in_memory_memory_service import InMemoryMemoryService
@@ -32,7 +32,7 @@ class MissingAPIKeyError(Exception):
 
 def main():
 	"""Starts the Salesforce agent server."""
-	host = "localhost"
+	host = "0.0.0.0"
 	port = 10003
 	try:
 		# Check for API key only if Vertex AI is not configured
@@ -42,7 +42,12 @@ def main():
 					"GOOGLE_API_KEY environment variable not set and GOOGLE_GENAI_USE_VERTEXAI is not TRUE."
 				)
 
-		capabilities = AgentCapabilities(streaming=True)
+		capabilities = AgentCapabilities(
+			streaming=True,
+			extensions=None,
+			push_notifications=None,
+			state_transition_history=None
+		)
 		skill = AgentSkill(
 			id="salesforce_operations",
 			name="Salesforce Operations",
@@ -57,10 +62,11 @@ def main():
 		agent_card = AgentCard(
 			name="Salesforce Agent",
 			description="An agent that works with Salesforce via MCP tools (query, CRUD, describe).",
-			url=f"http://{host}:{port}/",
+			#url=f"http://{host}:{port}/",
+			url=f"http://salesforce-agent:{port}/",
 			version="1.0.0",
-			defaultInputModes=["text/plain"],
-			defaultOutputModes=["text/plain"],
+			default_input_modes=["text/plain"],
+			default_output_modes=["text/plain"],
 			capabilities=capabilities,
 			skills=[skill],
 		)

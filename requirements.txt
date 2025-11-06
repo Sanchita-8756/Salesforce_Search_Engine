@@ -1,13 +1,16 @@
 fastmcp
-uvicorn[standard]==0.23.2
-starlette==0.31.0
-python-dotenv==1.0.0
-simple-salesforce==1.12.5
+uvicorn
+python-dotenv
+simple-salesforce
 pydantic
-requests==2.31.0
-pytest==7.4.2
-# a2a-sdk
-# adk
+requests
+pytest
+a2a-sdk
+google-adk
 nest_asyncio
-fastapi==0.110.2
-starlette==0.37.2
+fastapi
+starlette
+google-generativeai
+httpx
+click
+pyyaml

@@ -1,0 +1,47 @@
+version: '3.8'
+
+
+services:
+  salesforce-mcp:
+    build: .
+    ports:
+      - "8002:8002"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8002
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  salesforce-agent:
+    build: .
+    ports:
+      - "10003:10003"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=10003
+      - SALESFORCE_MCP_URL=http://salesforce-mcp:8002
+    env_file:
+      - .env
+    command: ["python", "-m", "salesforce_agent"]
+    restart: unless-stopped
+    depends_on:
+      - salesforce-mcp
+
+  host-agent:
+    build: .
+    ports:
+      - "10004:8000"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=10004
+      - SALESFORCE_AGENT_URL=http://salesforce-agent:10003
+    env_file:
+      - .env
+    command: ["adk", "web", "host_agent_salesforce", "--host", "0.0.0.0", "--port", "8000"]
+    restart: unless-stopped
+    depends_on:
+      - salesforce-agent
+networks:
+  default:
+    name: salesforce-network

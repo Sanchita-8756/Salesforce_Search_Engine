@@ -16,7 +16,9 @@ def create_agent() -> LlmAgent:
 		tools=[
 			MCPToolset(
 				connection_params=SseServerParams(
-					url="http://localhost:8002/sse",  # FastMCP Salesforce server
+					#url="http://localhost:8002/sse",  # FastMCP Salesforce server
+					url="http://salesforce-mcp:8002/sse",
+
 				)
 			)
 		],

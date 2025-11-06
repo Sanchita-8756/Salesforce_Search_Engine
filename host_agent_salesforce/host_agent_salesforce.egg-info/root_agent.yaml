@@ -1,0 +1,4 @@
+# root_agent.yaml
+root_agent:
+  module: host.agent
+  class: HostAgent

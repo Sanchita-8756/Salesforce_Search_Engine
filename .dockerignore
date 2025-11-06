@@ -1,0 +1,12 @@
+backend/
+dynamics_crm_agent/
+dynamics-crm-mcp-server/
+frontend/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.git/
+.gitignore
+README.md
+FRONTEND_BACKEND_README.md

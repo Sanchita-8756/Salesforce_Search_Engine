@@ -9,6 +9,8 @@ import nest_asyncio
 from a2a.client import A2ACardResolver
 from a2a.types import (
     AgentCard,
+    AgentCapabilities, 
+    AgentSkill,
     MessageSendParams,
     SendMessageRequest,
     SendMessageResponse,
@@ -76,6 +78,51 @@ class HostAgent:
             json.dumps({"name": card.name, "description": card.description})
             for card in self.cards.values()
         ]
+        if not agent_info:
+            agentt_name = "Salesforce Agent"
+            agentt_url = "http://salesforce-agent:10003"
+            agentt_name = "Salesforce Agent"
+            card = AgentCard(
+                name=agentt_name,
+                description="Salesforce agent.",
+                url="http://salesforce-agent:10003",
+                version="1.0.0",
+                capabilities=AgentCapabilities(
+                    chat=True,
+                    task=True,
+                    code_execution=False,
+                    data_access=False
+                ),
+                skills=[
+                    AgentSkill(
+                        id="query_records",
+                        name="query_records",
+                        description="Queries Salesforce records.",
+                        tags=["salesforce", "query"]
+                    ),
+                    AgentSkill(
+                        id="create_record",
+                        name="create_record",
+                        description="Creates a new Salesforce record.",
+                        tags=["salesforce", "create"]
+                    ),
+                    AgentSkill(
+                        id="update_record",
+                        name="update_record",
+                        description="Updates an existing Salesforce record.",
+                        tags=["salesforce", "update"]
+                    ),
+                ],
+                defaultInputModes=["text"],
+                defaultOutputModes=["text"],
+            )
+            remote_connection = RemoteAgentConnections(
+                        agent_card=card, agent_url=agentt_url
+                    )
+            self.remote_agent_connections[card.name] = remote_connection
+            self.cards[card.name] = card
+            agent_info = [json.dumps({"name": agentt_name, "description": "Manually registered Salesforce agent."})]
+        
         print("agent_info:", agent_info)
         self.agents = "\n".join(agent_info) if agent_info else "No friends found"
 
@@ -131,6 +178,9 @@ class HostAgent:
 
     async def send_message(self, agent_name: str, task: str, tool_context: ToolContext):
         """Sends a task to a remote friend agent."""
+        print(" Available agents:", list(self.agents))
+        print(" Available agents:", list(self.remote_agent_connections))
+        print(" Available agents:", list(self.remote_agent_connections.keys()))
         if agent_name not in self.remote_agent_connections:
             raise ValueError(f"Agent {agent_name} not found")
         client = self.remote_agent_connections[agent_name]
@@ -198,7 +248,8 @@ def _get_initialized_host_agent_sync():
     async def _async_main():
         # Hardcoded URLs for the Salesforce agents
         salesforce_agent_urls = [
-            "http://localhost:10003",  # Salesforce Agent
+            "http://salesforce-agent:10003" #docker urls
+            # "http://localhost:10003",  # Salesforce Agent
         ]
 
         print("initializing host agent")
