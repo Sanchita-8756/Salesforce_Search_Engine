@@ -1,0 +1,33 @@
+# Virtual environment
+.venv/
+venv/
+agent/
+dynamic*/
+
+# Environment variables
+.env
+
+# Configuration files with credentials
+config/config.yaml
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
